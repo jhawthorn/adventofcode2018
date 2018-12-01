@@ -9,13 +9,11 @@ p data.sum
 def part2(data)
   seen = Set.new
   acc = 0
-  loop do
-    data.each do |value|
-      seen.add(acc)
-      acc += value
-      if seen.include?(acc)
-        return acc
-      end
+  data.cycle do |value|
+    seen.add(acc)
+    acc += value
+    if seen.include?(acc)
+      return acc
     end
   end
 end
