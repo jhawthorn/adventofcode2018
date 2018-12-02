@@ -35,8 +35,8 @@ end
 
 def part2(data)
   a, b = _part2(data)
-  a.chars.zip(b.chars).select{|x,y| x == y }.join
+  a.chars.zip(b.chars).select{|x,y| x == y }.map(&:first).join
 end
 
-p part2(data)
+puts part2(data)
 
