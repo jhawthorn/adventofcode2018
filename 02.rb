@@ -18,24 +18,16 @@ end
 p part1(data)
 
 # Part 2
-def _part2(data)
-  data = Set.new(data)
-
-  data.each do |line|
-    0.upto(line.length) do |i|
-      changed = line.dup
-      LETTERS.each do |new_char|
-        changed[i] = new_char
-        next if changed == line
-        return [line, changed] if data.include?(changed)
-      end
+def part2(data)
+  data.each do |a|
+    data.each do |b|
+      unmatch = a.chars.zip(b.chars).map{|x,y| x != y }
+      next unless unmatch.one?
+      chars = a.chars
+      chars.delete_at(unmatch.index(true))
+      return chars.join
     end
   end
-end
-
-def part2(data)
-  a, b = _part2(data)
-  a.chars.zip(b.chars).select{|x,y| x == y }.map(&:first).join
 end
 
 puts part2(data)
