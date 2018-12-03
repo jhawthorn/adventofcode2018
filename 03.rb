@@ -7,10 +7,12 @@ def calculate(data)
     h[k] = []
   end
 
+  set = Set.new((1..1373).to_a)
+
   data.each do |line|
     line =~ /\A#(\d+) @ (\d+),(\d+): (\d+)x(\d+)\z/ || raise
 
-    n = $0
+    n = $1.to_i
     bx = $2.to_i
     by = $3.to_i
     w = $4.to_i
@@ -18,20 +20,18 @@ def calculate(data)
 
     by.upto(by + h - 1) do |y|
       bx.upto(bx + w - 1) do |x|
-        grid[[x,y]] += 1
+        set.delete(n) unless grid[[x,y]].empty?
+        grid[[x,y]].each do |other|
+          set.delete(other)
+        end
+        grid[[x,y]] << n
       end
     end
   end
 
-  grid.values.select{|v| v >= 2}.countt a
+  p grid.values.select{|v| v.count >= 2}.count
+
+  p set.to_a
 end
 
-test = [
-"#1 @ 1,3: 4x4",
-"#2 @ 3,1: 4x4",
-"#3 @ 5,5: 2x2",
-]
-
-
-pp calculate(test)
-pp calculate(data)
+calculate(data)
