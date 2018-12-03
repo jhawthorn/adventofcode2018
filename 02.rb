@@ -19,13 +19,16 @@ p part1(data)
 
 # Part 2
 def part2(data)
-  data.each do |a|
-    data.each do |b|
-      unmatch = a.chars.zip(b.chars).map{|x,y| x != y }
-      next unless unmatch.one?
-      chars = a.chars
-      chars.delete_at(unmatch.index(true))
-      return chars.join
+  set = Set.new
+
+  data.each do |line|
+    (0...line.length).each do |i|
+      modified = line.dup
+      modified[i] = '_'
+      if set.include?(modified)
+        return modified.tr('_', '')
+      end
+      set.add(modified)
     end
   end
 end
