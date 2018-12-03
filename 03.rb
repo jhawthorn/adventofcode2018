@@ -20,18 +20,16 @@ def calculate(data)
 
     by.upto(by + h - 1) do |y|
       bx.upto(bx + w - 1) do |x|
-        set.delete(n) unless grid[[x,y]].empty?
-        grid[[x,y]].each do |other|
-          set.delete(other)
-        end
         grid[[x,y]] << n
       end
     end
   end
 
-  p grid.values.select{|v| v.count >= 2}.count
+  overlaps = grid.values.select{|v| v.count >= 2}
 
-  p set.to_a
+  p overlaps.count
+
+  p (set - overlaps.flatten).first
 end
 
 calculate(data)
