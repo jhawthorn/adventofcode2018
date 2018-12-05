@@ -2,25 +2,19 @@ require 'set'
 require 'time'
 
 CHARS = (?a..?z)
+REPLACEMENTS = CHARS.flat_map { |c| [c + c.upcase, c.upcase + c] }
 
 def parse(input)
   input.strip
 end
 
-def process(data)
-  data = data.dup
-  CHARS.each do |c|
-    data.gsub!("#{c}#{c.upcase}", "")
-    data.gsub!("#{c.upcase}#{c}", "")
-  end
-  data
-end
-
 def part1(data)
-  last = nil
-  while last != data
-    last = data
-    data = process(data)
+  last = -1
+  while last != data.length
+    last = data.length
+    REPLACEMENTS.each do |r|
+      data.gsub!(r, "")
+    end
   end
   data.length
 end
