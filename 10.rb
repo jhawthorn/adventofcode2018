@@ -1,5 +1,4 @@
 require 'set'
-require 'time'
 
 def parse(data)
   data.lines.map{|l| l.split(/, */).map(&:strip).map(&:to_i) }
@@ -33,26 +32,36 @@ def tick(data, t)
   end
 end
 
-def calculate(input)
-  i = 0
-  last = nil
-  last_size = Float::INFINITY
+class Range
+  def tsearch
+    left, right = self.begin, self.end
 
-  loop do
-    data = tick(input, i)
-    data_size = size(data)
-    break if data_size > last_size
-    i += 1
-    last, last_size = data, data_size
+    loop do
+      if right - left <= 2
+        return (left + right)/2
+      end
+
+      leftThird = (2*left + right)/3
+      rightThird = (left + 2*right)/3
+
+      if yield(leftThird) < yield(rightThird)
+        left = leftThird
+      else
+        right = rightThird
+      end
+    end
   end
+end
 
-  draw(last)
+def calculate(input)
+  i = (0...100_000).tsearch { |i| -size(tick(input, i)) }
   p i
+  draw(tick(input, i))
 end
 
 
 data = parse(File.read("data/10_test.txt"))
-p calculate(data)
+calculate(data)
 
 data = parse(File.read("data/10.txt"))
-p calculate(data)
+calculate(data)
