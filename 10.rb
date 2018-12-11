@@ -17,13 +17,11 @@ def draw(points)
   maxx = points.map(&:first).max
   maxy = points.map(&:last).max
 
-  miny.upto(maxy) do |y|
-    minx.upto(maxx) do |x|
-      print points.include?([x,y]) ? "#" : '.'
-    end
-    puts
-  end
-  nil
+  miny.upto(maxy).map do |y|
+    minx.upto(maxx).map do |x|
+      points.include?([x,y]) ? "#" : '.'
+    end.join
+  end.join("\n")
 end
 
 def tick(data, t)
@@ -55,13 +53,21 @@ end
 
 def calculate(input)
   i = (0...100_000).tsearch { |i| -size(tick(input, i)) }
-  p i
-  draw(tick(input, i))
+  [draw(tick(input, i)), i]
 end
 
 
 data = parse(File.read("data/10_test.txt"))
-calculate(data)
+raise unless calculate(data) == [<<EOF.strip, 3]
+#...#..###
+#...#...#.
+#...#...#.
+#####...#.
+#...#...#.
+#...#...#.
+#...#...#.
+#...#..###
+EOF
 
 data = parse(File.read("data/10.txt"))
-calculate(data)
+puts calculate(data)
