@@ -57,13 +57,13 @@ end
 def part2(value)
   value = value.digits.reverse
   len = value.length
-  digits = []
+  digits = [nil] * len
 
   n = 0
   calculate do |v|
     n += 1
     digits << v
-    digits = digits.last(len)
+    digits.shift
 
     if digits == value
       return n - len
