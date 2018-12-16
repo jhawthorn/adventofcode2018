@@ -290,7 +290,7 @@ def part2(data)
   results = {}
 
   lowest_attack =
-    (4..100).bsearch do |elf_attack|
+    (4..).bsearch do |elf_attack|
       game = Game.new(data, elf_attack)
 
       game.round while !game.done? && !game.any_dead_elves?
